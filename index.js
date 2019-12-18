@@ -12,9 +12,10 @@ const server = express();
 
 server.use(morgan("dev"));
 server.use(helmet());
+server.use(express.json());
 server.use(cors());
 
-router.get("/", async (req, res) => {
+server.get("/", async (req, res) => {
   try {
     const hubs = await Hubs.find();
     res.status(200).json(hubs);
@@ -27,7 +28,7 @@ router.get("/", async (req, res) => {
 // @desc     Get a single item by ID
 // @route    GET /api/items/:id
 // @access   Private
-router.get("/:id", async (req, res) => {
+server.get("/:id", async (req, res) => {
   try {
     const item = await Items.findById(req.params.id);
     if (item) {
@@ -45,7 +46,7 @@ router.get("/:id", async (req, res) => {
 // @desc     Post an item
 // @route    POST /api/items
 // @access   Private
-router.post("/", async (req, res) => {
+server.post("/", async (req, res) => {
   try {
     const hub = await Hubs.insert(req.body);
     if (hub) {
@@ -65,7 +66,7 @@ router.post("/", async (req, res) => {
 // @desc     Edit an Item
 // @route    PUT /api/items:id
 // @access   Private
-router.put("/:id", async (req, res) => {
+server.put("/:id", async (req, res) => {
   try {
     const item = await Items.update(req.params.id, req.body);
     if (item) {
@@ -83,7 +84,7 @@ router.put("/:id", async (req, res) => {
 // @desc     Delete an Item
 // @route    DELETE /api/items:id
 // @access   Private
-router.delete("/:id", async (req, res) => {
+server.delete("/:id", async (req, res) => {
   try {
     const count = await Items.remove(req.params.id);
     if (count > 0) {
